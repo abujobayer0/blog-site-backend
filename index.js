@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import multer from "multer";
 import cors from "cors";
 import path from "path";
-import sharp from "sharp"; // add sharp library
 const PORT = 8000;
 
 const app = express();
@@ -75,12 +74,6 @@ app.post(
       const { title, article, urls } = req.body;
       const image1 = req.files["image1"][0].filename;
 
-      // resize and compress the image
-      await sharp(req.files["image1"][0].path)
-        .resize(800) // set width to 800px (you can adjust this value as needed)
-        .jpeg({ quality: 80 }) // set JPEG quality to 80%
-        .toFile(req.files["image1"][0].path);
-
       const newArticle = new Article({
         title,
         article,
@@ -106,8 +99,6 @@ app.get("/articles", async (req, res) => {
   }
 });
 
-// Add this middleware to handle errors that are not caught
-
 // Add this middleware to handle errors that are not caught by the above code
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -115,5 +106,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server listening on port http://localhost:${PORT}`);
+  console.log(`Server started successfully:${PORT}`);
 });
