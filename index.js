@@ -100,27 +100,15 @@ app.get("/articles", async (req, res) => {
 });
 // Define a new route to handle the DELETE request
 app.delete("/articles/:id", async (req, res) => {
-  const { id } = req.params;
-
+  const id = req.params.id;
   try {
-    // Find the article by ID
-    const article = await Article.findById(id);
-
-    if (!article) {
-      // Return a 404 error if the article is not found
-      return res.status(404).json({ error: "Article not found" });
-    }
-
-    // Delete the article from the database
-    await article.remove();
-
-    // Return a success message
-    res.json({ message: "Article deleted successfully" });
-  } catch (error) {
-    // Return a 500 error if there's a server error
-    res.status(500).json({ error: "Server error" });
+    const deletedArticle = await Article.findByIdAndDelete(id);
+    res.json(deletedArticle);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
+
 // Add this middleware to handle errors that are not caught by the above code
 app.use((err, req, res, next) => {
   console.error(err.stack);
