@@ -108,7 +108,18 @@ app.delete("/articles/:id", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
+app.put("/articles/update/:id", async (req, res) => {
+  try {
+    const updatedArticle = await Article.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(updatedArticle);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 // Add this middleware to handle errors that are not caught by the above code
 app.use((err, req, res, next) => {
   console.error(err.stack);
